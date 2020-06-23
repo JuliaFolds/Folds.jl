@@ -3,11 +3,17 @@ uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
 authors = ["Takafumi Arakaki <aka.tkf@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+Transducers = "28d57a85-8fef-5791-bfe6-a80928e7c999"
+
 [compat]
+Transducers = "0.4.35"
 julia = "1"
 
 [extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["Aqua", "Documenter", "Test"]
