@@ -9,4 +9,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/JuliaFolds/Folds.jl",
+    push_preview = true,
 )
