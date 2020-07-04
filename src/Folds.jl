@@ -16,9 +16,11 @@ using Transducers:
     IdentityTransducer,
     SIMDFlag,
     Transducer,
+    dcollect,
     dreduce,
     extract_transducer,
-    reduce_commutative
+    reduce_commutative,
+    tcollect
 include("utils.jl")
 include("schedulers.jl")
 include("core.jl")
