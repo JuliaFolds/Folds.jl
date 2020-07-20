@@ -8,7 +8,7 @@ pull_request_rules:
     conditions:
       - base=master
       - "#approved-reviews-by>=1"
-      - status-success=Test Julia ^1.5.0-rc1
+      - status-success=Test Julia ~1.5.0-rc1
       - status-success=Test Julia 1.4
       - status-success=Test Julia 1.0
       - status-success=Documenter
@@ -21,7 +21,7 @@ pull_request_rules:
     conditions:
       - base=master
       - "#approved-reviews-by>=1"
-      - status-success=Test Julia ^1.5.0-rc1
+      - status-success=Test Julia ~1.5.0-rc1
       - status-success=Test Julia 1.4
       - status-success=Test Julia 1.0
       - status-success=Documenter
@@ -34,7 +34,7 @@ pull_request_rules:
     conditions:
       - base=master
       - "#approved-reviews-by>=1"
-      - status-success=Test Julia ^1.5.0-rc1
+      - status-success=Test Julia ~1.5.0-rc1
       - status-success=Test Julia 1.4
       - status-success=Test Julia 1.0
       - status-success=Documenter
@@ -47,7 +47,7 @@ pull_request_rules:
     conditions:
       - author=tkf
       - base=master
-      - status-success=Test Julia ^1.5.0-rc1
+      - status-success=Test Julia ~1.5.0-rc1
       - status-success=Test Julia 1.4
       - status-success=Test Julia 1.0
       - status-success=Documenter
