@@ -1,37 +1,76 @@
 baremodule Folds
 
-export fold
+export DistributedEx, SequentialEx, ThreadedEx
 
-function fold end
-function foldl end
+using Transducers: DistributedEx, SequentialEx, ThreadedEx
+
+module Core
+abstract type ReducerFunctionAndFoldable <: Function end
+end
+
+import DefineSingletons
+
 function reduce end
-function append! end
+function mapreduce end
+function collect end
+function copy end
 
-abstract type Scheduler end
+DefineSingletons.@def_singleton all isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton any isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton count isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton extrema isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton findall isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton findfirst isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton findlast isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton maximum isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton minimum isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton prod isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton sum isa Core.ReducerFunctionAndFoldable
+DefineSingletons.@def_singleton unique isa Core.ReducerFunctionAndFoldable
+
+function issorted end
+
+function set end
+# function dict end
 
 module Implementations
-using ..Folds: Folds, Scheduler
+using BangBang: Empty, append!!, push!!, union!!
+using Base: add_sum, mul_prod
+using DefineSingletons: @def_singleton
+using InitialValues: InitialValue, asmonoid
 using Transducers:
-    Foldable,
-    IdentityTransducer,
-    SIMDFlag,
-    Transducer,
+    Consecutive,
+    DefaultInit,
+    DistributedEx,
+    Executor,
+    Filter,
+    Map,
+    OnInit,
+    PreferParallel,
+    ReduceIf,
+    SequentialEx,
+    ThreadedEx,
+    Transducers,
     dcollect,
-    dreduce,
+    executor_for,
     extract_transducer,
-    reduce_commutative,
+    maybe_set_simd,
+    right,
     tcollect
+
+using ..Folds.Core: ReducerFunctionAndFoldable
+using ..Folds: Folds
+
 include("utils.jl")
-include("schedulers.jl")
-include("core.jl")
-include("reducers.jl")
-
-# Use README as the docstring of the module:
-@doc let path = joinpath(dirname(@__DIR__), "README.md")
-    include_dependency(path)
-    replace(read(path, String), r"^```julia"m => "```jldoctest README")
-end Folds
-
+include("reduce.jl")
+include("collect.jl")
+include("misc.jl")
 end
+
+module Testing
+include("testing.jl")
+end
+
+Implementations.define_docstrings()
 
 end
