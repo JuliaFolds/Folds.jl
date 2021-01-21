@@ -140,10 +140,12 @@ test_with_sequential(executors; kwargs...) =
 
 function test_with_sequential(tests, executors)
     @testset "$(getlabel(x))" for x in enumerate(tests)
+        @debug "test_with_sequential $(getlabel(x))"
         i, testcase = x
         f(args...) = testcase.f(testcase.preargs..., args...; testcase.kwargs...)
         ==′ = getequality(x)
         @testset "$ex" for ex in executors
+            @debug "test_with_sequential $(getlabel(x)) $ex"
             :nodist in testcase.tags && ex isa DistributedEx && continue
             xs0 = down(getdata(x))
             xs1 = getdata(x)
