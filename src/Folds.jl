@@ -34,7 +34,7 @@ function set end
 # function dict end
 
 module Implementations
-using BangBang: Empty, append!!, push!!, union!!
+using BangBang: Empty, SingletonVector, append!!, collector, finish!, push!!, union!!
 using Base: add_sum, mul_prod
 using DefineSingletons: @def_singleton
 using InitialValues: InitialValue, asmonoid
@@ -56,7 +56,10 @@ using Transducers:
     extract_transducer,
     maybe_set_simd,
     right,
-    tcollect
+    tcollect,
+    transduce,
+    unreduced,
+    wheninit
 
 using ..Folds.Core: ReducerFunctionAndFoldable
 using ..Folds: Folds

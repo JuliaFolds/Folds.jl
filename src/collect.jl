@@ -5,6 +5,16 @@ Folds.collect(itr, ex::SequentialEx) = collect(extract_transducer(itr)...; ex.kw
 Folds.collect(itr, ex::ThreadedEx) = tcollect(extract_transducer(itr)...; ex.kwargs...)
 Folds.collect(itr, ex::DistributedEx) = dcollect(extract_transducer(itr)...; ex.kwargs...)
 
+# TODO: generalize this to arbitrary container
+Folds.collect(itr, ex::Executor) =
+    finish!(unreduced(transduce(
+        Map(SingletonVector),
+        wheninit(collector, append!!),
+        collector(),
+        itr,
+        ex,
+    )))
+
 function as_copy_args(T, itr)
     xf, coll = extract_transducer(itr)
     return (xf, T, coll)
