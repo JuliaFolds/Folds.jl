@@ -14,6 +14,7 @@ function reduce end
 function mapreduce end
 function collect end
 function copy end
+function map end
 
 DefineSingletons.@def_singleton all isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton any isa Core.ReducerFunctionAndFoldable
@@ -45,6 +46,7 @@ using Transducers:
     Executor,
     Filter,
     Map,
+    MapSplat,
     OnInit,
     PreferParallel,
     ReduceIf,

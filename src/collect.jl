@@ -25,3 +25,28 @@ Folds.copy(T, itr; kwargs...) = Folds.copy(T, itr, parallel_executor(itr; kwargs
 Folds.copy(T, itr, ex::SequentialEx) = copy(as_copy_args(T, itr)...; ex.kwargs...)
 Folds.copy(T, itr, ex::ThreadedEx) = tcopy(as_copy_args(T, itr)...; ex.kwargs...)
 Folds.copy(T, itr, ex::DistributedEx) = dcopy(as_copy_args(T, itr)...; ex.kwargs...)
+
+Folds.map(f, itr; kwargs...) = Folds.collect(itr |> Map(f), parallel_executor(itr; kwargs...))
+Folds.map(f, itr, ex::Executor) = Folds.collect(itr |> Map(f), ex)
+
+map_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
+@noinline function map_check_no_kwargs(kwargs)
+    error(
+        "`map(f, itrs..., executor)` does not accept any keyworg arguments" *
+        "\ngot:" *
+        string(kwargs),
+    )
+end
+
+function Folds.map(f, itr, itrs...; kwargs...)
+    args0, ex0 = de_snoc(itr, itrs...)
+    if ex0 isa Executor
+        xs = zip(args0...)
+        ex = ex0
+        map_check_no_kwargs((; kwargs...))
+    else
+        xs = zip(itr, itrs...)
+        ex = parallel_executor(bottom_foldable(xs); kwargs...)
+    end
+    return Folds.collect(xs |> MapSplat(f), ex)
+end

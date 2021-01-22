@@ -73,6 +73,9 @@ extrema((x - 5)^2 for x in 1:10)
 findall(isodd, 1:10)                                        # nogpu,nodist,FIXME
 findfirst(x -> x > 3, 1:10)                                 # nogpu,nodist,FIXME
 findlast(x -> x < 3, 1:10)                                  # nogpu,nodist,FIXME
+map(x -> x^2, 1:10)                                                # nogpu,FIXME
+map(+, 1:10, 11:20)                                         # nogpu,nodist,FIXME
+map(+, 1:10, 11:20, 21:30)                                  # nogpu,nodist,FIXME
 maximum(0:9)
 maximum(9:-1:0)
 maximum([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])

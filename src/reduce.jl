@@ -21,8 +21,8 @@ function Folds.mapreduce(f, op, itr, ex::Executor; init = InitialValue(op))
     return result
 end
 
-check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
-@noinline function check_no_kwargs(kwargs)
+mapreduce_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
+@noinline function mapreduce_check_no_kwargs(kwargs)
     error(
         "`mapreduce(f, op, itrs..., executor)` only accepts `init` as keyworg argument" *
         "\ngot:" *
@@ -35,7 +35,7 @@ function Folds.mapreduce(f, op, itr, itrs...; init = InitialValue(op), kwargs...
     if ex0 isa Executor
         xs = zip(args0...)
         ex = ex0
-        check_no_kwargs((; kwargs...))
+        mapreduce_check_no_kwargs((; kwargs...))
     else
         xs = zip(itr, itrs...)
         ex = parallel_executor(bottom_foldable(xs); kwargs...)
