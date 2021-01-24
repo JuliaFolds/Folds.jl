@@ -68,6 +68,8 @@ all(isodd(x) for x in 1:10)                                        # nogpu,FIXME
 all(isodd(x) for x in 1:2:10)                                      # nogpu,FIXME
 any(isodd(x) for x in 1:10)                                        # nogpu,FIXME
 any(isodd(x) for x in 2:2:10)                                      # nogpu,FIXME
+copy(Set, 1:10)                                             # nogpu,nodist,FIXME
+copy(Vector, 1:10)                                                 # nogpu,FIXME
 count(isodd(x) for x in 1:10)
 extrema((x - 5)^2 for x in 1:10)
 findall(isodd, 1:10)                                        # nogpu,nodist,FIXME
@@ -76,6 +78,9 @@ findlast(x -> x < 3, 1:10)                                  # nogpu,nodist,FIXME
 map(x -> x^2, 1:10)                                                # nogpu,FIXME
 map(+, 1:10, 11:20)                                         # nogpu,nodist,FIXME
 map(+, 1:10, 11:20, 21:30)                                  # nogpu,nodist,FIXME
+mapreduce(x -> x^2, +, 1:10)
+mapreduce(*, +, 1:10, 11:20)                                      # nodist,FIXME
+mapreduce(*, +, 1:10, 11:20, 21:30)                               # nodist,FIXME
 maximum(0:9)
 maximum(9:-1:0)
 maximum([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])

@@ -54,11 +54,13 @@ using Transducers:
     ThreadedEx,
     Transducers,
     dcollect,
+    dcopy,
     executor_for,
     extract_transducer,
     maybe_set_simd,
     right,
     tcollect,
+    tcopy,
     transduce,
     unreduced,
     wheninit
