@@ -25,6 +25,17 @@ end
 
 parallel_executor(xs; kwargs...) = executor_for(xs, PreferParallel(; kwargs...))
 
+# TODO: something like these should be in the interface
+get_basesize(ex) = get(ex.kwargs, :basesize, nothing)
+set_basesize(ex, basesize) = @set ex.kwargs = (; ex.kwargs..., basesize = basesize)
+
+# https://github.com/JuliaLang/julia/pull/33533
+if VERSION < v"1.4"
+    const PartitionableArray = Vector
+else
+    const PartitionableArray = AbstractArray
+end
+
 function define_docstrings()
     docstrings = [:Folds => joinpath(dirname(@__DIR__), "README.md")]
     docsdir = joinpath(@__DIR__, "docs")

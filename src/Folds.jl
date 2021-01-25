@@ -35,7 +35,10 @@ function set end
 # function dict end
 
 module Implementations
-using BangBang: Empty, SingletonVector, append!!, collector, finish!, push!!, union!!
+using Accessors: @set
+using BangBang:
+    Empty, SingletonVector, append!!, collector, finish!, push!!, union!!, merge!!
+using MicroCollections: emptyshim, singletonshim
 using Base: add_sum, mul_prod
 using DefineSingletons: @def_singleton
 using InitialValues: InitialValue, asmonoid
@@ -45,6 +48,7 @@ using Transducers:
     DistributedEx,
     Executor,
     Filter,
+    IdentityTransducer,
     Map,
     MapSplat,
     OnInit,

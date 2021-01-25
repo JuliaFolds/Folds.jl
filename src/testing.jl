@@ -69,6 +69,9 @@ all(isodd(x) for x in 1:2:10)                                      # nogpu,FIXME
 any(isodd(x) for x in 1:10)                                        # nogpu,FIXME
 any(isodd(x) for x in 2:2:10)                                      # nogpu,FIXME
 copy(Set, 1:10)                                             # nogpu,nodist,FIXME
+copy(Set, Dict(zip('a':'j', 1:10)))                         # nogpu,nodist,FIXME
+copy(Dict, (x => x^2 for x in 1:10))                        # nogpu,nodist,FIXME
+copy(Dict, (x => x^2 for x in Set(1:10)))                   # nogpu,nodist,FIXME
 copy(Vector, 1:10)                                                 # nogpu,FIXME
 count(isodd(x) for x in 1:10)
 extrema((x - 5)^2 for x in 1:10)
@@ -109,27 +112,31 @@ issorted(x^2 for x in 1:10 if isodd(x))
 args_and_kwargs(args...; kwargs...) =
     (preargs = args[1:end-1], data = args[end], kwargs = (; kwargs...))
 
-function parse_rawdata()
-    global TESTCASES_WITH_SEQUENTIAL_DEFAULT =
-        map(split(TESTCASES_WITH_SEQUENTIAL_RAWDATA, "\n", keepempty = false)) do x
-            @debug "Parsing: $x"
-            fstr, rest = split(x, "(", limit = 2)
-            ex = Meta.parse("DUMMY($rest")
-            ex.args[1] = args_and_kwargs
-            testcase = @eval $ex
-            f = getproperty(Folds, Symbol(fstr))
-            if (m = match(r"^(.*?) *# *(.*?) *$", x)) !== nothing
-                label = m[1]
-                tags = map(Symbol, split(m[2], ","))
-            else
-                label = x
-                tags = Symbol[]
-            end
-            return (; label = label, tags = tags, f = f, testcase...)
+function parse_tests(str, _module)
+    return map(split(str, "\n", keepempty = false)) do x
+        @debug "Parsing: $x"
+        fstr, rest = split(x, "(", limit = 2)
+        ex = Meta.parse("DUMMY($rest")
+        ex.args[1] = args_and_kwargs
+        testcase = Base.eval(_module, ex)
+        f = getproperty(Folds, Symbol(fstr))
+        if (m = match(r"^(.*?) *# *(.*?) *$", x)) !== nothing
+            label = m[1]
+            tags = map(Symbol, split(m[2], ","))
+        else
+            label = x
+            tags = Symbol[]
         end
+        return (; label = label, tags = tags, f = f, testcase...)
+    end
 end
 
-parse_rawdata()
+function eval_rawdata()
+    global TESTCASES_WITH_SEQUENTIAL_DEFAULT =
+        parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA, @__MODULE__)
+end
+
+eval_rawdata()
 
 always(_) = true
 

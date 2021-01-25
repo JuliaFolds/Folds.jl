@@ -23,8 +23,51 @@ end
 Folds.copy(T, itr; kwargs...) = Folds.copy(T, itr, parallel_executor(itr; kwargs...))
 
 Folds.copy(T, itr, ex::SequentialEx) = copy(as_copy_args(T, itr)...; ex.kwargs...)
-Folds.copy(T, itr, ex::ThreadedEx) = tcopy(as_copy_args(T, itr)...; ex.kwargs...)
 Folds.copy(T, itr, ex::DistributedEx) = dcopy(as_copy_args(T, itr)...; ex.kwargs...)
+
+# TODO: implement `copy(itr, ex)`; move materializer to here
+
+Folds.copy(T, itr, ex::Executor) = copy_default(T, itr, ex)
+
+copy_default(T, itr, ex) =
+    Folds.reduce(append!!, itr |> Map(SingletonVector), ex; init = Empty(T))
+
+struct SingletonShimOf{T} end
+(::SingletonShimOf{T})(x) where {T} = singletonshim(T, x)
+
+function copy_default(T::Type{<:AbstractSet}, itr, ex)
+    xf, array = extract_transducer(itr)
+    if xf isa Union{Map{identity},IdentityTransducer}
+        if array isa PartitionableArray
+            basesize =
+                something(get_basesize(ex), max(1, length(array) ÷ Threads.nthreads()))
+            return Folds.reduce(
+                union!!,
+                Iterators.partition(array, basesize),
+                set_basesize(ex, 1);
+                init = Empty(T),
+            )
+        end
+    end
+    return Folds.reduce(union!!, itr |> Map(SingletonVector), ex; init = Empty(T))
+end
+
+function copy_default(T::Type{<:AbstractDict}, itr, ex)
+    xf, array = extract_transducer(itr)
+    if xf isa Union{Map{identity},IdentityTransducer}
+        if array isa PartitionableArray
+            basesize =
+                something(get_basesize(ex), max(1, length(array) ÷ Threads.nthreads()))
+            return Folds.reduce(
+                merge!!,
+                Iterators.partition(array, basesize),
+                set_basesize(ex, 1);
+                init = emptyshim(T),
+            )
+        end
+    end
+    return Folds.reduce(merge!!, itr |> Map(SingletonShimOf{T}()), ex; init = emptyshim(T))
+end
 
 Folds.map(f, itr; kwargs...) = Folds.collect(itr |> Map(f), parallel_executor(itr; kwargs...))
 Folds.map(f, itr, ex::Executor) = Folds.collect(itr |> Map(f), ex)
