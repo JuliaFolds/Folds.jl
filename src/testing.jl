@@ -64,23 +64,23 @@ macro data_str(s)
 end
 
 TESTCASES_WITH_SEQUENTIAL_RAWDATA = """
-all(isodd(x) for x in 1:10)                                        # nogpu,FIXME
-all(isodd(x) for x in 1:2:10)                                      # nogpu,FIXME
-any(isodd(x) for x in 1:10)                                        # nogpu,FIXME
-any(isodd(x) for x in 2:2:10)                                      # nogpu,FIXME
-copy(Set, 1:10)                                             # nogpu,nodist,FIXME
-copy(Set, Dict(zip('a':'j', 1:10)))                         # nogpu,nodist,FIXME
-copy(Dict, (x => x^2 for x in 1:10))                        # nogpu,nodist,FIXME
-copy(Dict, (x => x^2 for x in Set(1:10)))                   # nogpu,nodist,FIXME
-copy(Vector, 1:10)                                                 # nogpu,FIXME
+all(isodd(x) for x in 1:10)
+all(isodd(x) for x in 1:2:10)
+any(isodd(x) for x in 1:10)
+any(isodd(x) for x in 2:2:10)
+copy(Set, 1:10)                                                   # nodist,FIXME
+copy(Set, Dict(zip('a':'j', 1:10)))                               # nodist,FIXME
+copy(Dict, (x => x^2 for x in 1:10))                              # nodist,FIXME
+copy(Dict, (x => x^2 for x in Set(1:10)))                         # nodist,FIXME
+copy(Vector, 1:10)
 count(isodd(x) for x in 1:10)
 extrema((x - 5)^2 for x in 1:10)
-findall(isodd, 1:10)                                        # nogpu,nodist,FIXME
-findfirst(x -> x > 3, 1:10)                                 # nogpu,nodist,FIXME
-findlast(x -> x < 3, 1:10)                                  # nogpu,nodist,FIXME
-map(x -> x^2, 1:10)                                                # nogpu,FIXME
-map(+, 1:10, 11:20)                                         # nogpu,nodist,FIXME
-map(+, 1:10, 11:20, 21:30)                                  # nogpu,nodist,FIXME
+findall(isodd, 1:10)                                              # nodist,FIXME
+findfirst(x -> x > 3, 1:10)                                       # nodist,FIXME
+findlast(x -> x < 3, 1:10)                                        # nodist,FIXME
+map(x -> x^2, 1:10)
+map(+, 1:10, 11:20)                                               # nodist,FIXME
+map(+, 1:10, 11:20, 21:30)                                        # nodist,FIXME
 mapreduce(x -> x^2, +, 1:10)
 mapreduce(*, +, 1:10, 11:20)                                      # nodist,FIXME
 mapreduce(*, +, 1:10, 11:20, 21:30)                               # nodist,FIXME
@@ -94,15 +94,15 @@ minimum([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])
 minimum([1:10; [missing]])
 prod(1:2:10)
 prod([1:10; [missing]])
-prod(([x -x; -x x] for x in 1:2:19))                                     # nogpu
+prod(([x -x; -x x] for x in 1:2:19))
 prod(y for x in 1:11 if isodd(x) for y in 1:x:x^2; init = 1)
 sum(1:10)
 sum([1:10; [missing]])
 sum(x^2 for x in 1:11)
 sum(x^2 for x in 1:11 if isodd(x); init = 0)
-unique(gcd(x, 42) for x in 1:30)                                         # nogpu
-issorted([1:5; 5:-1:0])                                     # nogpu,nodist,FIXME
-issorted(1:10)                                              # nogpu,nodist,FIXME
+unique(gcd(x, 42) for x in 1:30)
+issorted([1:5; 5:-1:0])                                           # nodist,FIXME
+issorted(1:10)                                                    # nodist,FIXME
 """
 #=
 issorted(x^2 for x in 1:10)
