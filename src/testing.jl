@@ -140,8 +140,8 @@ eval_rawdata()
 
 always(_) = true
 
-function testcases_with_sequential(; upload = identity, include_test = always)
-    tests = deepcopy(TESTCASES_WITH_SEQUENTIAL_DEFAULT)
+function testcases_with_sequential(tests; upload = identity, include_test = always)
+    tests = deepcopy(tests)
     tests = filter(include_test, tests)
     tests = map(tests) do ex
         (; ex..., data = mapbottom(upload, ex.data))
@@ -151,9 +151,10 @@ function testcases_with_sequential(; upload = identity, include_test = always)
 end
 
 test_with_sequential(executors; kwargs...) =
-    test_with_sequential(testcases_with_sequential(; kwargs...), executors)
+    test_with_sequential(TESTCASES_WITH_SEQUENTIAL_DEFAULT, executors; kwargs...)
 
-function test_with_sequential(tests, executors)
+function test_with_sequential(tests, executors; kwargs...)
+    tests = testcases_with_sequential(tests; kwargs...)
     @testset "$(getlabel(x))" for x in enumerate(tests)
         @debug "test_with_sequential $(getlabel(x))"
         i, testcase = x
