@@ -11,25 +11,25 @@ down(xs::AbstractSet) = Set(xs)
 mapbottom(f, itr) = f(itr)
 
 function mapbottom(f, itr::Base.Generator)
-    ys = f(itr.iter)
+    ys = mapbottom(f, itr.iter)
     ys === nothing && return nothing
     return Base.Generator(itr.f, ys)
 end
 
 function mapbottom(f, itr::Iterators.Filter)
-    ys = f(itr.itr)
+    ys = mapbottom(f, itr.itr)
     ys === nothing && return nothing
     return Iterators.Filter(itr.flt, ys)
 end
 
 function mapbottom(f, itr::Iterators.Flatten)
-    ys = f(itr.it)
+    ys = mapbottom(f, itr.it)
     ys === nothing && return nothing
     return Iterators.flatten(ys)
 end
 
 function mapbottom(f, itr::Tuple)
-    ys = map(f, itr)::Tuple
+    ys = map(x -> mapbottom(f, x), itr)::Tuple
     any(isnothing, ys) && return nothing
     return ys
 end
