@@ -1,19 +1,24 @@
 Folds.collect(itr; kwargs...) = Folds.collect(itr, parallel_executor(itr; kwargs...))
 
-Folds.collect(itr, ex::PreferParallel) = Folds.collect(itr, executor_for(itr, ex))
-Folds.collect(itr, ex::SequentialEx) = collect(extract_transducer(itr)...; ex.kwargs...)
-Folds.collect(itr, ex::ThreadedEx) = tcollect(extract_transducer(itr)...; ex.kwargs...)
-Folds.collect(itr, ex::DistributedEx) = dcollect(extract_transducer(itr)...; ex.kwargs...)
+function Folds.collect(itr, ex::Executor)
+    acc =
+        transduce(Map(SingletonVector), wheninit(collector, append!!), collector(), itr, ex)
+    return reshape_as(finish!(unreduced(acc)), itr)
+end
 
-# TODO: generalize this to arbitrary container
-Folds.collect(itr, ex::Executor) =
-    finish!(unreduced(transduce(
-        Map(SingletonVector),
-        wheninit(collector, append!!),
-        collector(),
-        itr,
-        ex,
-    )))
+Folds.collect(itr, ex::PreferParallel) = Folds.collect(itr, executor_for(itr, ex))
+Folds.collect(itr, ex::SequentialEx) =
+    reshape_as(collect(extract_transducer(itr)...; ex.kwargs...), itr)
+Folds.collect(itr, ex::ThreadedEx) =
+    reshape_as(tcollect(extract_transducer(itr)...; ex.kwargs...), itr)
+Folds.collect(itr, ex::DistributedEx) =
+    reshape_as(dcollect(extract_transducer(itr)...; ex.kwargs...), itr)
+
+reshape_as(ys, xs) = reshape_as(ys, xs, IteratorSize(xs))
+reshape_as(ys, _, ::IteratorSize) = ys
+reshape_as(ys, xs, ::HasShape) = reshape(ys, size(xs))
+reshape_as(::Empty{T}, xs, isize::HasShape) where {T<:AbstractVector} =
+    reshape_as(T(undef, length(xs)), xs, isize)
 
 function as_copy_args(T, itr)
     xf, coll = extract_transducer(itr)

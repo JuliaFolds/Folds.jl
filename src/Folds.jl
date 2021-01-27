@@ -35,6 +35,8 @@ function set end
 # function dict end
 
 module Implementations
+using Base: HasShape, IteratorSize
+
 using Accessors: @set
 using BangBang:
     Empty, SingletonVector, append!!, collector, finish!, push!!, union!!, merge!!
