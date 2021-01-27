@@ -24,7 +24,7 @@ end
 mapreduce_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
 @noinline function mapreduce_check_no_kwargs(kwargs)
     error(
-        "`mapreduce(f, op, itrs..., executor)` only accepts `init` as keyworg argument" *
+        "`mapreduce(f, op, itrs..., executor)` only accepts `init` as keyword argument" *
         "\ngot:" *
         string(kwargs),
     )

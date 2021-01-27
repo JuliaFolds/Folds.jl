@@ -13,7 +13,7 @@ end
 
 @testset "executor with keyword arguments" begin
     err = @test_error Folds.map(identity, 1:2, SequentialEx(); foo = :bar)
-    @test "not accept any keyworg arguments" ∈ᵉʳʳᵒʳ err
+    @test "not accept any keyword arguments" ∈ᵉʳʳᵒʳ err
 end
 
 end  # module

@@ -80,7 +80,7 @@ Folds.map(f, itr, ex::Executor) = Folds.collect(itr |> Map(f), ex)
 map_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
 @noinline function map_check_no_kwargs(kwargs)
     error(
-        "`map(f, itrs..., executor)` does not accept any keyworg arguments" *
+        "`map(f, itrs..., executor)` does not accept any keyword arguments" *
         "\ngot:" *
         string(kwargs),
     )
