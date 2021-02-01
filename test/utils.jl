@@ -13,3 +13,5 @@ end
 
 # const ∈ᵒᶜᶜᵘʳˢ = occursin
 ∈ᵉʳʳᵒʳ(needle, err) = occursin(needle, sprint(showerror, err))
+
+==ₜ(x, y) = typeof(x) === typeof(y) && isequal(x, y)

@@ -36,6 +36,20 @@ else
     const PartitionableArray = AbstractArray
 end
 
+const _SOME_BOOL_ = Ref(false)
+@noinline unreachable() = error("unreachable")
+
+function some_item(itr)
+    for x in itr
+        _SOME_BOOL_[] && return x
+    end
+    unreachable()
+end
+
+# The result of this function must not leak outside the public function boundary.
+@inline infer_eltype(::T) where {T} = infer_eltype(T)
+@inline infer_eltype(::Type{T}) where {T} = Core.Compiler.return_type(some_item, Tuple{T})
+
 function define_docstrings()
     docstrings = [:Folds => joinpath(dirname(@__DIR__), "README.md")]
     docsdir = joinpath(@__DIR__, "docs")

@@ -184,10 +184,14 @@ struct InitUnique{X,Y} <: Function end
 end
 
 function exec(::typeof(Folds.unique), ex, f::F, itr, init) where {F}
+    if Base.IteratorEltype(itr) isa Base.HasEltype
+        X = eltype(itr)
+    else
+        X = Union{}
+    end
     # Using inference as an optimization. The result of this inference
-    # does not affect the result:
-    X = eltype(itr)
-    Y = Core.Compiler.return_type(f, Tuple{X})
+    # does not affect the returned value:
+    Y = infer_eltype(f(x) for x in itr)
     ys, = Transducers.fold(PushUnique(f), itr, ex; init = OnInit(InitUnique{X,Y}()))
     if Base.IteratorEltype(itr) isa Base.HasEltype
         return ys::Vector{X}
