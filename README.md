@@ -22,3 +22,25 @@ julia> Folds.sum(1:10, ThreadedEx())  # equivalent to above
 julia> Folds.sum(1:10, DistributedEx())
 55
 ```
+
+Most of the functions can be used with iterator comprehensions:
+
+```julia
+julia> Folds.sum(y for x in 1:10 if isodd(x) for y in 1:x^2)
+4917
+```
+
+and [Transducers.jl](https://github.com/JuliaFolds/Transducers.jl):
+
+```julia
+julia> using Transducers
+
+julia> 1:10 |> Filter(isodd) |> MapCat(x -> 1:x^2) |> Folds.sum
+4917
+```
+
+Folds.jl decouples the implementation and the execution mechanism
+("executor"). Additional executors can be installed from
+[FoldsThreads.jl](https://github.com/JuliaFolds/FoldsThreads.jl),
+[FoldsCUDA.jl](https://github.com/JuliaFolds/FoldsCUDA.jl) (rather WIP), and
+[FoldsDagger.jl](https://github.com/JuliaFolds/FoldsDagger.jl) (very WIP)
