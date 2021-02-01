@@ -39,7 +39,15 @@ using Base: HasShape, IteratorSize
 
 using Accessors: @set
 using BangBang:
-    Empty, SingletonVector, append!!, collector, finish!, push!!, union!!, merge!!
+    Empty,
+    SingletonVector,
+    append!!,
+    collector,
+    finish!,
+    push!!,
+    union!!,
+    merge!!,
+    setdiff!!
 using MicroCollections: emptyshim, singletonshim
 using Base: add_sum, mul_prod
 using DefineSingletons: @def_singleton

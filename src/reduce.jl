@@ -165,7 +165,7 @@ end
 
 # TODO: do this with public API of Transducers or make it public
 function Transducers.combine(f!::PushUnique, (ys1, seen1), (ys2, seen2))
-    seen3 = setdiff!(seen2, seen1)
+    seen3 = setdiff!!(seen2, seen1)
     isempty(seen3) && return (ys1, seen1)
     return (append!!(Filter(x -> f!.f(x) in seen3), ys1, ys2), union!!(seen1, seen2))
 end
