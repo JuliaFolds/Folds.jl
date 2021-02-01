@@ -1,11 +1,14 @@
 module TestCopy
 
-using DataFrames: DataFrame
 using Folds
-using Folds.Testing: parse_tests, test_with_sequential
-using StructArrays: StructVector
+using Folds.Testing: eval_call_data, test_with_sequential
 using Test
 using Transducers: DistributedEx, PreferParallel, SequentialEx, ThreadedEx
+
+preamble = quote
+    using DataFrames: DataFrame
+    using StructArrays: StructVector
+end
 
 rawdata = """
 copy(StructVector, ((x = x, y = x^2) for x in 1:10))
@@ -14,7 +17,7 @@ copy(DataFrame, ((x = x, y = x^2) for x in 1:10))
 copy(DataFrame, ((x = x, y = x^2) for x in 1:10 if isodd(x)))
 """
 
-tests = parse_tests(rawdata, @__MODULE__)
+tests = eval_call_data(rawdata, preamble)
 executors = [
     SequentialEx(),
     ThreadedEx(),

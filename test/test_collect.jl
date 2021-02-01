@@ -1,6 +1,7 @@
 module TestCollect
 
 using Folds
+using Folds.Testing: eval_collection_data
 using Transducers: PreferParallel
 using Test
 
@@ -29,16 +30,7 @@ testdata_executors = map(split(raw_testdata_executors, "\n", keepempty = false))
     x => Base.include_string((@__MODULE__), x)
 end
 
-tests = map(split(raw_testdata_iterables, "\n", keepempty = false)) do x
-    if (m = match(r"^(.*?) *# *(.*?) *$", x)) !== nothing
-        label = m[1]
-        tags = map(Symbol, split(m[2], ","))
-    else
-        label = x
-        tags = Symbol[]
-    end
-    (label = label, data = Base.include_string((@__MODULE__), x), tags = tags)
-end
+tests = eval_collection_data(raw_testdata_iterables)
 
 @testset "$elabel" for (elabel, ex) in testdata_executors
     @testset "$(t.label)" for t in tests

@@ -131,12 +131,47 @@ function parse_tests(str, _module)
     end
 end
 
-function eval_rawdata()
+function _eval_collection_data(str, _module)
+    return map(split(str, "\n", keepempty = false)) do x
+        if (m = match(r"^(.*?) *# *(.*?) *$", x)) !== nothing
+            label = m[1]
+            tags = map(Symbol, split(m[2], ","))
+        else
+            label = x
+            tags = Symbol[]
+        end
+        (label = label, data = Base.include_string(_module, x), tags = tags)
+    end
+end
+
+eval_call_data(str, preamble::Union{Expr,Nothing} = nothing) =
+    _eval_data(parse_tests, str, preamble)
+
+eval_collection_data(str, preamble::Union{Expr,Nothing} = nothing) =
+    _eval_data(_eval_collection_data, str, preamble)
+
+function _eval_data(f, str, preamble)
+    load_me_everywhere()
+    @gensym folds_testing
+    preamble = QuoteNode(preamble)
+    _module = QuoteNode(folds_testing)
+    @everywhere $_remote_eval_data($f, $str, $preamble, $_module)
+    return getfield(getfield(Main, folds_testing), :DATA)
+end
+
+function _remote_eval_data(f, str, preamble, _module)
+    @eval Main module $_module
+        $preamble
+        const DATA = $f($str, $_module)
+    end
+end
+
+function _reeval()
     global TESTCASES_WITH_SEQUENTIAL_DEFAULT =
         parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA, @__MODULE__)
 end
 
-eval_rawdata()
+_reeval()
 
 always(_) = true
 
@@ -170,21 +205,39 @@ function test_with_sequential(tests, executors; kwargs...)
     end
 end
 
-function test_uses_threads(fold, ex)
-    if Threads.nthreads() == 1
-        error("require `Threads.nthreads() > 1`")
+function spinfor(d)
+    limit = time_ns() + d
+    while limit > time_ns()
+        ccall(:jl_cpu_pause, Cvoid, ())
     end
-    ids = fold(vcat, ([Threads.threadid()] for _ in 1:2*Threads.nthreads()), ex)
-    @test length(Set(ids)) > 1
 end
 
-function test_uses_processes(fold, ex)
-    if nprocs() == 1
-        error("require `nprocs() > 1`")
+function test_uses_threads(ex)
+    @testset "test_uses_threads" begin
+        if Threads.nthreads() == 1
+            error("require `Threads.nthreads() > 1`")
+        else
+            ids = Folds.map(1:2*Threads.nthreads(), ex) do _
+                spinfor(1000_000)
+                Threads.threadid()
+            end
+            @test length(Set(ids)) > 1
+        end
     end
-    load_me_everywhere()
-    ids = fold(vcat, ([getpid()] for _ in 1:2*nprocs()), ex)
-    @test length(Set(ids)) > 1
+end
+
+function test_uses_processes(ex; autoskip = false)
+    @testset "test_uses_processes" begin
+        if nprocs() == 1
+            autoskip || error("require `nprocs() > 1`")
+        else
+            load_me_everywhere()
+            ids = Folds.map(1:2*nprocs(), ex) do _
+                getpid()
+            end
+            @test length(Set(ids)) > 1
+        end
+    end
 end
 
 function load_me_everywhere()
