@@ -32,7 +32,7 @@ DefineSingletons.@def_singleton unique isa Core.ReducerFunctionAndFoldable
 function issorted end
 
 function set end
-# function dict end
+function dict end
 
 module Implementations
 using Base: HasShape, IteratorSize
@@ -60,13 +60,11 @@ using Transducers:
     ThreadedEx,
     Transducers,
     dcollect,
-    dcopy,
     executor_for,
     extract_transducer,
     maybe_set_simd,
     right,
     tcollect,
-    tcopy,
     transduce,
     unreduced,
     wheninit

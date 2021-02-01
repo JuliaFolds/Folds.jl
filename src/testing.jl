@@ -70,10 +70,11 @@ any(isodd(x) for x in 1:10)
 any(isodd(x) for x in 2:2:10)
 copy(Set, 1:10)                                                   # nodist,FIXME
 copy(Set, Dict(zip('a':'j', 1:10)))                               # nodist,FIXME
-copy(Dict, (x => x^2 for x in 1:10))                              # nodist,FIXME
+copy(Dict, (x => x^2 for x in 1:10))
 copy(Dict, (x => x^2 for x in Set(1:10)))                         # nodist,FIXME
 copy(Vector, 1:10)
 count(isodd(x) for x in 1:10)
+dict(x => x^2 for x in 1:10)
 extrema((x - 5)^2 for x in 1:10)
 findall(isodd, 1:10)                                              # nodist,FIXME
 findfirst(x -> x > 3, 1:10)                                       # nodist,FIXME
@@ -96,6 +97,8 @@ prod(1:2:10)
 prod([1:10; [missing]])
 prod(([x -x; -x x] for x in 1:2:19))
 prod(y for x in 1:11 if isodd(x) for y in 1:x:x^2; init = 1)
+set(1:10)                                                         # nodist,FIXME
+set(x^2 for x in 1:10)
 sum(1:10)
 sum([1:10; [missing]])
 sum(x^2 for x in 1:11)

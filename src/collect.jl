@@ -28,7 +28,6 @@ end
 Folds.copy(T, itr; kwargs...) = Folds.copy(T, itr, parallel_executor(itr; kwargs...))
 
 Folds.copy(T, itr, ex::SequentialEx) = copy(as_copy_args(T, itr)...; ex.kwargs...)
-Folds.copy(T, itr, ex::DistributedEx) = dcopy(as_copy_args(T, itr)...; ex.kwargs...)
 
 # TODO: implement `copy(itr, ex)`; move materializer to here
 
@@ -98,3 +97,11 @@ function Folds.map(f, itr, itrs...; kwargs...)
     end
     return Folds.collect(xs |> MapSplat(f), ex)
 end
+
+# TODO: use `Folds.copy(AbstractSet, ...)`?
+Folds.set(itr; kwargs...) = Folds.copy(Set, itr; kwargs...)
+Folds.set(itr, ex; kwargs...) = Folds.copy(Set, itr, ex; kwargs...)
+
+# TODO: use `Folds.copy(AbstractDict, ...)`?
+Folds.dict(itr; kwargs...) = Folds.copy(Dict, itr; kwargs...)
+Folds.dict(itr, ex; kwargs...) = Folds.copy(Dict, itr, ex; kwargs...)

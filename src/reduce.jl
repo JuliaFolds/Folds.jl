@@ -237,7 +237,3 @@ Folds.issorted(itr::AbstractArray, order::Base.Ordering, ex::Executor) = Folds.a
     ),
     ex,
 )
-
-# TODO: use `Folds.copy(Set, AbstractSet; kw...)`?
-Folds.set(itr; kw...) = Folds.copy(Set, itr; kw...)
-Folds.set(itr, ex; kw...) = Folds.copy(Set, itr, ex; kw...)
