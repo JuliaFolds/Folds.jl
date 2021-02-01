@@ -36,12 +36,12 @@ else
     const PartitionableArray = AbstractArray
 end
 
-const _SOME_BOOL_ = Ref(false)
+@noinline some_bool() = _non_existing_variable_::Bool
 @noinline unreachable() = error("unreachable")
 
 function some_item(itr)
     for x in itr
-        _SOME_BOOL_[] && return x
+        some_bool() && return x
     end
     unreachable()
 end
