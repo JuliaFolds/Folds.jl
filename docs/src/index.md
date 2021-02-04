@@ -1,8 +1,9 @@
 # Folds.jl
 
-```@docs
-Folds
-Folds.fold
-Folds.Scheduler
-Folds.foldl
+```@index
+Pages = ["index.md"]
+```
+
+```@autodocs
+Modules = [Folds]
 ```
