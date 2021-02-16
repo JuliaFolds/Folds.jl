@@ -49,7 +49,7 @@ using BangBang:
     merge!!,
     setdiff!!
 using MicroCollections: emptyshim, singletonshim
-using Base: add_sum, mul_prod
+using Base: add_sum, mul_prod, mapreduce_empty
 using DefineSingletons: @def_singleton
 using InitialValues: InitialValue, asmonoid
 using Transducers:
