@@ -7,15 +7,22 @@ end
 Folds.reduce(op, itr; init = InitialValue(op), kwargs...) =
     Folds.reduce(op, itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
 
-Folds.mapreduce(f, op, itr; init = InitialValue(op), kwargs...) = Folds.mapreduce(
-    f,
-    op,
-    itr,
-    parallel_executor(bottom_foldable(itr); kwargs...);
-    init = init,
-)
+Folds.mapreduce(f::F, op::OP, itr; init = InitialValue(op), kwargs...) where {F,OP} =
+    Folds.mapreduce(
+        f,
+        op,
+        itr,
+        parallel_executor(bottom_foldable(itr); kwargs...);
+        init = init,
+    )
 
-function Folds.mapreduce(f, op, itr, ex::Executor; init = InitialValue(op))
+function Folds.mapreduce(
+    f::F,
+    op::OP,
+    itr,
+    ex::Executor;
+    init = InitialValue(op),
+) where {F,OP}
     result = Transducers.fold(op, itr |> Map(f), ex; init = init)
     result === InitialValue(op) && return mapreduce_empty(f, op, eltype(itr))
     return result
@@ -74,11 +81,15 @@ function exec(reducer, ex, f, itr, init)
 end
 
 (reducer::ReducerFunctionAndFoldable)(itr; kwargs...) = reducer(identity, itr; kwargs...)
-(reducer::ReducerFunctionAndFoldable)(f, itr; init = unspecified, kwargs...) =
+(reducer::ReducerFunctionAndFoldable)(f::F, itr; init = unspecified, kwargs...) where {F} =
     exec(reducer, parallel_executor(itr; kwargs...), f, itr, init)
 
-(reducer::ReducerFunctionAndFoldable)(f, itr, ex::Executor; init = unspecified) =
-    exec(reducer, ex, f, itr, init)
+(reducer::ReducerFunctionAndFoldable)(
+    f::F,
+    itr,
+    ex::Executor;
+    init = unspecified,
+) where {F} = exec(reducer, ex, f, itr, init)
 
 (reducer::ReducerFunctionAndFoldable)(itr, ex::Executor; init = unspecified) =
     exec(reducer, ex, identity, itr, init)
