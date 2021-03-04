@@ -1,7 +1,7 @@
 name = "Folds"
 uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
 authors = ["Takafumi Arakaki <aka.tkf@gmail.com> and contributors"]
-version = "0.2.2-DEV"
+version = "0.2.2"
 
 [deps]
 Accessors = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"
@@ -22,8 +22,8 @@ Baselet = "0.1"
 DefineSingletons = "0.1.1"
 InitialValues = "0.2.10"
 MicroCollections = "0.1.0"
-Transducers = "0.4.35"
 Referenceables = "0.1.2"
+Transducers = "0.4.35"
 julia = "1.4"
 
 [extras]
