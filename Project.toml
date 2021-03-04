@@ -23,7 +23,7 @@ DefineSingletons = "0.1.1"
 InitialValues = "0.2.10"
 MicroCollections = "0.1.0"
 Transducers = "0.4.35"
-Referenceables = "0.1.1"
+Referenceables = "0.1.2"
 julia = "1.4"
 
 [extras]

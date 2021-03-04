@@ -179,11 +179,11 @@ uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[Referenceables]]
 deps = ["Adapt"]
-git-tree-sha1 = "32b9364938eb88824552a44599aeb12414ad0e74"
-repo-rev = "master"
+git-tree-sha1 = "e681d3bfa49cd46c3c161505caddf20f0e62aaa9"
+repo-rev = "release"
 repo-url = "https://github.com/tkf/Referenceables.jl.git"
 uuid = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
-version = "0.1.2-DEV"
+version = "0.1.2"
 
 [[Requires]]
 deps = ["UUIDs"]
