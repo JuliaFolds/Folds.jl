@@ -52,6 +52,44 @@ function Folds.mapreduce(f, op, itr, itrs...; init = InitialValue(op), kwargs...
     return result
 end
 
+@def_monoid return_nothing
+@inline return_nothing(_) = nothing
+@inline return_nothing(_, _) = nothing
+
+foreach_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
+@noinline function foreach_check_no_kwargs(kwargs)
+    error(
+        "`foreach(f, itrs..., executor)` accepts no keyword arguments" *
+        "\ngot:" *
+        string(kwargs),
+    )
+end
+
+foreach_check_referenceables(_, _) = nothing
+@noinline function foreach_check_referenceables(::DistributedEx, args)
+    error(
+        "`foreach(f, itrs..., ::DistributedEx)` is used with a referenceable. " *
+        "Currently, this is not supported as the mutation will not be reflected " *
+        "to the original collection."
+    )
+end
+
+function Folds.foreach(f, itr, itrs...; kwargs...)
+    args0, ex0 = de_snoc(itr, itrs...)
+    if ex0 isa Executor
+        xs = zip(args0...)
+        ex = ex0
+        foreach_check_no_kwargs((; kwargs...))
+        Baselet.Specialized.any(isreferenceable, args0) &&
+            foreach_check_referenceables(ex, args0)
+    else
+        xs = zip(itr, itrs...)
+        ex = parallel_executor(bottom_foldable(xs); kwargs...)
+    end
+    transduce(MapSplat(f), return_nothing, nothing, xs, ex)
+    return
+end
+
 """
     ReducerFunctionAndFoldable
 

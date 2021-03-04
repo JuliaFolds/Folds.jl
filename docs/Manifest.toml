@@ -26,6 +26,11 @@ version = "0.3.30"
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
+[[Baselet]]
+git-tree-sha1 = "aebf55e6d7795e02ca500a689d326ac979aaf89e"
+uuid = "9718e550-a3fa-408a-8086-8db961cd8217"
+version = "0.1.1"
+
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
 git-tree-sha1 = "919c7f3151e79ff196add81d7f4e45d91bbf420b"
@@ -82,10 +87,10 @@ uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.26.1"
 
 [[Folds]]
-deps = ["Accessors", "BangBang", "DefineSingletons", "Distributed", "InitialValues", "MicroCollections", "Test", "Transducers"]
+deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "InitialValues", "MicroCollections", "Referenceables", "Test", "Transducers"]
 path = ".."
 uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
-version = "0.2.0-DEV"
+version = "0.2.2-DEV"
 
 [[Future]]
 deps = ["Random"]
@@ -171,6 +176,14 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[Random]]
 deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Referenceables]]
+deps = ["Adapt"]
+git-tree-sha1 = "32b9364938eb88824552a44599aeb12414ad0e74"
+repo-rev = "master"
+repo-url = "https://github.com/tkf/Referenceables.jl.git"
+uuid = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
+version = "0.1.2-DEV"
 
 [[Requires]]
 deps = ["UUIDs"]
