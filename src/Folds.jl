@@ -16,6 +16,7 @@ function foreach end
 function collect end
 function copy end
 function map end
+function map! end
 
 DefineSingletons.@def_singleton all isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton any isa Core.ReducerFunctionAndFoldable
@@ -54,7 +55,7 @@ using MicroCollections: emptyshim, singletonshim
 using Base: add_sum, mul_prod, mapreduce_empty
 using DefineSingletons: @def_singleton
 using InitialValues: @def_monoid, InitialValue, asmonoid
-using Referenceables: isreferenceable
+using Referenceables: isreferenceable, referenceable
 using Transducers:
     Consecutive,
     DefaultInit,
