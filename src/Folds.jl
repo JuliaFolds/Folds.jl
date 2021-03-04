@@ -12,6 +12,7 @@ import DefineSingletons
 
 function reduce end
 function mapreduce end
+function foreach end
 function collect end
 function copy end
 function map end
@@ -48,10 +49,12 @@ using BangBang:
     union!!,
     merge!!,
     setdiff!!
+using Baselet: Baselet
 using MicroCollections: emptyshim, singletonshim
 using Base: add_sum, mul_prod, mapreduce_empty
 using DefineSingletons: @def_singleton
-using InitialValues: InitialValue, asmonoid
+using InitialValues: @def_monoid, InitialValue, asmonoid
+using Referenceables: isreferenceable
 using Transducers:
     Consecutive,
     DefaultInit,
