@@ -16,6 +16,10 @@ extrema(length_partition_by(divby(8), 5:19))
 reduce(TeeRF(min, max), 1:10)
 reduce(TeeRF(min, max), (2x for x in 1:10))
 reduce(TeeRF(min, max), (2x for x in 1:10 if isodd(x)))
+reduce(+, 1:10 |> Map(tuple) |> Broadcasting())
+reduce(+, ((x, 2x) for x in 1:10) |> Broadcasting())
+sum(1:10 |> Map(tuple) |> Broadcasting())
+sum(((x, 2x) for x in 1:10) |> Broadcasting())
 """
 
 tests = parse_tests(rawdata, @__MODULE__)
