@@ -54,7 +54,7 @@ using Baselet: Baselet
 using MicroCollections: emptyshim, singletonshim
 using Base: add_sum, mul_prod, mapreduce_empty
 using DefineSingletons: @def_singleton
-using InitialValues: @def_monoid, InitialValue, asmonoid
+using InitialValues: @def_monoid, SpecificInitialValue, asmonoid
 using Referenceables: isreferenceable, referenceable
 using Transducers:
     Consecutive,
@@ -63,6 +63,7 @@ using Transducers:
     Executor,
     Filter,
     IdentityTransducer,
+    InitOf,
     Map,
     MapSplat,
     OnInit,

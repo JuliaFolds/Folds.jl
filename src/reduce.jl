@@ -1,13 +1,13 @@
-function Folds.reduce(op, itr, ex::Executor; init = InitialValue(op))
+function Folds.reduce(op, itr, ex::Executor; init = FoldsInit)
     result = Transducers.fold(op, itr, ex; init = init)
-    result === InitialValue(op) && return reduce_empty(op, eltype(itr))
+    result isa FoldsInitOf && return reduce_empty(op, eltype(itr))
     return result
 end
 
-Folds.reduce(op, itr; init = InitialValue(op), kwargs...) =
+Folds.reduce(op, itr; init = FoldsInit, kwargs...) =
     Folds.reduce(op, itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
 
-Folds.mapreduce(f::F, op::OP, itr; init = InitialValue(op), kwargs...) where {F,OP} =
+Folds.mapreduce(f::F, op::OP, itr; init = FoldsInit, kwargs...) where {F,OP} =
     Folds.mapreduce(
         f,
         op,
@@ -21,10 +21,10 @@ function Folds.mapreduce(
     op::OP,
     itr,
     ex::Executor;
-    init = InitialValue(op),
+    init = FoldsInit,
 ) where {F,OP}
     result = Transducers.fold(op, itr |> Map(f), ex; init = init)
-    result === InitialValue(op) && return mapreduce_empty(f, op, eltype(itr))
+    result isa FoldsInitOf && return mapreduce_empty(f, op, eltype(itr))
     return result
 end
 
@@ -37,7 +37,7 @@ mapreduce_check_no_kwargs(::NamedTuple{(),Tuple{}}) = nothing
     )
 end
 
-function Folds.mapreduce(f, op, itr, itrs...; init = InitialValue(op), kwargs...)
+function Folds.mapreduce(f, op, itr, itrs...; init = FoldsInit, kwargs...)
     args0, ex0 = de_snoc(itr, itrs...)
     if ex0 isa Executor
         xs = zip(args0...)
@@ -48,7 +48,7 @@ function Folds.mapreduce(f, op, itr, itrs...; init = InitialValue(op), kwargs...
         ex = parallel_executor(bottom_foldable(xs); kwargs...)
     end
     result = Transducers.fold(op, xs |> MapSplat(f), ex; init = init)
-    result === InitialValue(op) && return mapreduce_empty(f, op, eltype(xs))
+    result isa FoldsInitOf && return mapreduce_empty(f, op, eltype(xs))
     return result
 end
 
@@ -110,7 +110,7 @@ This function provides the following signature:
 ReducerFunctionAndFoldable
 
 function monoid_for end
-default_init_for(reducer) = InitialValue(monoid_for(reducer))
+default_init_for(reducer) = FoldsInit
 default_simd_for(reducer) = Val(true)
 
 """
