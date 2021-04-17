@@ -230,10 +230,19 @@ function test_uses_threads(ex)
     end
 end
 
-function test_uses_processes(ex; autoskip = false)
+is_ci() = get(ENV, "CI", "false") == "true"
+
+function test_uses_processes(ex; autoskip = !is_ci())
     @testset "test_uses_processes" begin
         if nprocs() == 1
-            autoskip || error("require `nprocs() > 1`")
+            if autoskip
+                @warn """
+                Skipping `test_uses_processes` since there is no Distributed workers.
+                Run the test with environment variable `CI` set to `true` to run this test.
+                """
+            else
+                error("require `nprocs() > 1`")
+            end
         else
             load_me_everywhere()
             ids = Folds.map(1:2*nprocs(), ex) do _
