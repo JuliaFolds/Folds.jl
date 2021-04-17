@@ -2,6 +2,17 @@
 default_to(value, _) = value
 default_to(::Unspecified, default) = default
 
+"""
+    FoldsInit(op)
+
+Like `Transducers.DefaultInit`, but only for Folds.jl. This is used instead
+of `DefaultInit` so that we can call `reduce_empty` manually. This should
+probably be merged to Transducers.jl (or stop using `reduce_empty`).
+"""
+FoldsInit
+struct FoldsInitOf{OP} <: SpecificInitialValue{OP} end
+@def_singleton FoldsInit = InitOf{FoldsInitOf}()
+
 function bottom_foldable(itr)
     _xf, foldable = extract_transducer(itr)
     return foldable

@@ -2,7 +2,18 @@ using Distributed: nprocs, @everywhere
 using Folds
 using Test
 using Transducers: DistributedEx  # TODO: stop special-casing
-using Transducers: SequentialEx
+using Transducers: Eduction, SequentialEx, extract_transducer
+
+const Comprehension = Union{
+    Iterators.Generator,
+    Iterators.Filter,
+    Iterators.Flatten,
+}
+
+function down(xs::Union{Eduction,Comprehension})
+    xf, foldable = extract_transducer(xs)
+    return xf(down(foldable))
+end
 
 down(xs) = collect(xs)
 down(xs::AbstractDict) = Dict(xs)
