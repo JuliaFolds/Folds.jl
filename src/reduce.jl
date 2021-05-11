@@ -1,10 +1,10 @@
-function Folds.reduce(op, itr, ex::Executor; init = FoldsInit)
+function Folds.reduce(op::OP, itr, ex::Executor; init = FoldsInit) where {OP}
     result = Transducers.fold(op, itr, ex; init = init)
     result isa FoldsInitOf && return reduce_empty(op, eltype(itr))
     return result
 end
 
-Folds.reduce(op, itr; init = FoldsInit, kwargs...) =
+Folds.reduce(op::OP, itr; init = FoldsInit, kwargs...) where {OP} =
     Folds.reduce(op, itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
 
 Folds.mapreduce(f::F, op::OP, itr; init = FoldsInit, kwargs...) where {F,OP} =
