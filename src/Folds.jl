@@ -37,7 +37,6 @@ function set end
 function dict end
 
 module Implementations
-using Base: HasShape, IteratorSize
 
 using Accessors: @set
 using BangBang:
@@ -50,9 +49,9 @@ using BangBang:
     union!!,
     merge!!,
     setdiff!!
+using Base: HasShape, IteratorSize, add_sum, mapreduce_empty, mul_prod, reduce_empty
 using Baselet: Baselet
 using MicroCollections: emptyshim, singletonshim
-using Base: add_sum, mul_prod, mapreduce_empty
 using DefineSingletons: @def_singleton
 using InitialValues: @def_monoid, SpecificInitialValue, asmonoid
 using Referenceables: isreferenceable, referenceable

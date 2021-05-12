@@ -93,6 +93,7 @@ findlast(x -> x < 3, 1:10)                                        # nodist,FIXME
 map(x -> x^2, 1:10)
 map(+, 1:10, 11:20)                                               # nodist,FIXME
 map(+, 1:10, 11:20, 21:30)                                        # nodist,FIXME
+mapreduce(identity, +, 1:0)
 mapreduce(x -> x^2, +, 1:10)
 mapreduce(*, +, 1:10, 11:20)                                      # nodist,FIXME
 mapreduce(*, +, 1:10, 11:20, 21:30)                               # nodist,FIXME
@@ -108,6 +109,7 @@ prod(1:2:10)
 prod([1:10; [missing]])
 prod(([x -x; -x x] for x in 1:2:19))
 prod(y for x in 1:11 if isodd(x) for y in 1:x:x^2; init = 1)
+reduce(+, 1:0)
 set(1:10)                                                         # nodist,FIXME
 set(x^2 for x in 1:10)
 sum(1:10)
