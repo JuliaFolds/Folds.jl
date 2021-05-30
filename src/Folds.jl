@@ -51,10 +51,11 @@ using BangBang:
     setdiff!!
 using Base: HasShape, IteratorSize, add_sum, mapreduce_empty, mul_prod, reduce_empty
 using Baselet: Baselet
-using MicroCollections: emptyshim, singletonshim
 using DefineSingletons: @def_singleton
 using InitialValues: @def_monoid, SpecificInitialValue, asmonoid
+using MicroCollections: emptyshim, singletonshim
 using Referenceables: isreferenceable, referenceable
+using Requires: @require
 using Transducers:
     Consecutive,
     DefaultInit,
@@ -75,6 +76,7 @@ using Transducers:
     executor_for,
     extract_transducer,
     maybe_set_simd,
+    reducingfunction,
     right,
     tcollect,
     transduce,
@@ -88,6 +90,13 @@ include("utils.jl")
 include("reduce.jl")
 include("collect.jl")
 include("misc.jl")
+
+function __init__()
+    @require OnlineStatsBase="925886fa-5bf2-5e8e-b522-a9147a512338" begin
+        include("interop/onlinestats.jl")
+    end
+end
+
 end
 
 module Testing
