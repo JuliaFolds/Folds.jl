@@ -15,7 +15,7 @@ stores the result in `xs`, and returns `xs`.
 julia> using Folds
 
 julia> Folds.scan!(+, [1, 2, 3])
-3-element Vector{Int64}:
+3-element Array{Int64,1}:
  1
  3
  6
