@@ -16,7 +16,7 @@ julia> let pidigits = string(BigFloat(π; precision = 2^20))[3:end]
                startswith(SubString(pidigits, i), string(i))
            end
        end
-3-element Array{Int64,1}:
+3-element Vector{Int64}:
      1
  16470
  44899

@@ -16,7 +16,7 @@ julia> @show pidigits[1:5];
 pidigits[1:5] = [3, 1, 4, 1, 5]
 
 julia> sort!(collect(Folds.set(x for x in Iterators.partition(pidigits, 8) if issorted(x))))
-8-element Array{SubArray{Int64,1,Array{Int64,1},Tuple{UnitRange{Int64}},true},1}:
+8-element Vector{SubArray{Int64, 1, Vector{Int64}, Tuple{UnitRange{Int64}}, true}}:
  [0, 0, 1, 1, 4, 4, 4, 6]
  [0, 0, 1, 2, 2, 3, 7, 8]
  [0, 1, 1, 1, 3, 7, 8, 8]
