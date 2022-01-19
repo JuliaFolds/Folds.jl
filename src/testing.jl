@@ -144,6 +144,8 @@ unique(gcd(x, 42) for x in 1:30)
 unique(x for x in 1:100 if x < 3)
 issorted([1:5; 5:-1:0])                                           # nodist,FIXME
 issorted(1:10)                                                    # nodist,FIXME
+cumsum([1:10;])                                                   # nodist,FIXME
+cumprod([1:10;])                                                  # nodist,FIXME
 """
 #=
 issorted(x^2 for x in 1:10)

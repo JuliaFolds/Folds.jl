@@ -37,10 +37,20 @@ DefineSingletons.@def_singleton unique isa Core.ReducerFunctionAndFoldable
 
 function issorted end
 
+function cumsum end
+function cumsum! end
+function cumprod end
+function cumprod! end
+function accumulate end
+function accumulate! end
+function scan! end
+
 function set end
 function dict end
 
 module Implementations
+
+import ThreadedScans
 
 using Accessors: @set
 using BangBang:
@@ -92,6 +102,7 @@ using ..Folds: Folds
 
 include("utils.jl")
 include("reduce.jl")
+include("scan.jl")
 include("collect.jl")
 include("misc.jl")
 

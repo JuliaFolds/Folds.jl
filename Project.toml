@@ -14,6 +14,7 @@ MicroCollections = "128add7d-3638-4c79-886c-908ea0c25c34"
 Referenceables = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+ThreadedScans = "24d252fe-5d94-4a69-83ea-56a14333d47a"
 Transducers = "28d57a85-8fef-5791-bfe6-a80928e7c999"
 
 [compat]
@@ -25,8 +26,9 @@ InitialValues = "0.2.10, 0.3"
 MicroCollections = "0.1.0"
 Referenceables = "0.1.2"
 Requires = "0.5, 1.0"
+ThreadedScans = "0.1"
 Transducers = "0.4.35"
-julia = "1.4"
+julia = "1.5"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
