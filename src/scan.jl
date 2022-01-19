@@ -44,5 +44,5 @@ Folds.cumsum!(ys, xs, ex::Executor) = Folds.accumulate!(+, ys, xs, ex)
 Folds.cumprod(xs; kwargs...) = Folds.cumprod(xs, parallel_executor(xs; kwargs...))
 Folds.cumprod(xs, ex::Executor) = Folds.accumulate(*, xs, ex)
 
-Folds.cumprod(ys, xs; kwargs...) = Folds.cumprod(ys, xs, parallel_executor(xs; kwargs...))
-Folds.cumprod(ys, xs, ex::Executor) = Folds.accumulate!(*, ys, xs, ex)
+Folds.cumprod!(ys, xs; kwargs...) = Folds.cumprod!(ys, xs, parallel_executor(xs; kwargs...))
+Folds.cumprod!(ys, xs, ex::Executor) = Folds.accumulate!(*, ys, xs, ex)
