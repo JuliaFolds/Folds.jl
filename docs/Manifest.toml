@@ -98,10 +98,10 @@ uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.26.1"
 
 [[Folds]]
-deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "Transducers"]
+deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
 path = ".."
 uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
-version = "0.2.5-DEV"
+version = "0.2.7-DEV"
 
 [[Future]]
 deps = ["Random"]
@@ -305,6 +305,12 @@ version = "1.3.1"
 [[Test]]
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[ThreadedScans]]
+deps = ["ArgCheck"]
+git-tree-sha1 = "ca1ba3000289eacba571aaa4efcefb642e7a1de6"
+uuid = "24d252fe-5d94-4a69-83ea-56a14333d47a"
+version = "0.1.0"
 
 [[Transducers]]
 deps = ["ArgCheck", "BangBang", "CompositionsBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "Setfield", "SplittablesBase", "Tables"]
