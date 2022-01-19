@@ -140,20 +140,6 @@ end
 (reducer::ReducerFunctionAndFoldable)(itr, ex::Executor; init = unspecified) =
     exec(reducer, ex, identity, itr, init)
 
-"""
-    typeof(Folds.X :: Type{<:ReducerFunctionAndFoldable})
-    typeof(Folds.X)
-
-Equivalent to typeof(Folds.X)
-"""
-reducer_typeof
-struct ReducerTypeGetter end
-const reducer_typeof = ReducerTypeGetter()
-function Base.getproperty(::ReducerTypeGetter, name::Symbol)
-    f = getproperty(Folds, name)
-    return typeof(f)::ReducerFunctionAndFoldable
-end
-
 monoid_for(::typeof(Folds.sum)) = add_sum
 monoid_for(::typeof(Folds.prod)) = mul_prod
 monoid_for(::typeof(Folds.maximum)) = max
