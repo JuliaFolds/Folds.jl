@@ -11,7 +11,7 @@ See _Extended help_ in [`Folds.reduce`](@ref) for more information.
 julia> using Folds
 
 julia> Folds.map!(+, zeros(Int, 3), 1:3, 2:2:6)
-3-element Array{Int64,1}:
+3-element Vector{Int64}:
  3
  6
  9

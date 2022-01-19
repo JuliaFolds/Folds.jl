@@ -53,7 +53,7 @@ julia> table = StructVector(
        );
 
 julia> Folds.copy(StructVector, (row for row in table if row.x === :a))
-3-element StructArray(::Array{Symbol,1}, ::Array{Int64,1}) with eltype NamedTuple{(:x, :y),Tuple{Symbol,Int64}}:
+3-element StructArray(::Vector{Symbol}, ::Vector{Int64}) with eltype NamedTuple{(:x, :y), Tuple{Symbol, Int64}}:
  (x = :a, y = 1)
  (x = :a, y = 2)
  (x = :a, y = 4)

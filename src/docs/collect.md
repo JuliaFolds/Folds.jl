@@ -15,12 +15,12 @@ Unlike `Base.collect`, the output can be an array of type other than `Array`.
 julia> using Folds
 
 julia> Folds.collect(x^2 for x in 1:4 if isodd(x))
-2-element Array{Int64,1}:
+2-element Vector{Int64}:
  1
  9
 
 julia> Folds.collect(i for i in 1:10_000_000 if sin(i) > 1 - 1e-12)
-4-element Array{Int64,1}:
+4-element Vector{Int64}:
   573204
  4846147
  7138963

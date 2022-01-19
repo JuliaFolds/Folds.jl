@@ -13,7 +13,7 @@ See _Extended help_ in [`Folds.reduce`](@ref) for more information.
 julia> using Folds
 
 julia> Folds.unique([2, 4, 3, 0, 0, 4, 3, 4, 3, 1, 0, 0, 4, 1, 4, 1, 3, 3, 4, 0])
-5-element Array{Int64,1}:
+5-element Vector{Int64}:
  2
  4
  3
@@ -26,7 +26,7 @@ julia> @show pidigits[1:5];
 pidigits[1:5] = [3, 1, 4, 1, 5]
 
 julia> Folds.unique(x for x in pidigits if isodd(x))
-5-element Array{Int64,1}:
+5-element Vector{Int64}:
  3
  1
  5
