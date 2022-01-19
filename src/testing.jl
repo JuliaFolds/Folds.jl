@@ -126,6 +126,33 @@ issorted(x^2 for x in 1:10)
 issorted(x^2 for x in 1:10 if isodd(x))
 =#
 
+TESTCASES_WITH_SEQUENTIAL_RAWDATA_JL17 = """
+findmax(0:9)                                                      # nodist,FIXME
+findmax(9:-1:0)                                                   # nodist,FIXME
+findmax([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                           # nodist,FIXME
+findmax([1:10; [missing]])                                        # nodist,FIXME
+findmin(0:9)                                                      # nodist,FIXME
+findmin(9:-1:0)                                                   # nodist,FIXME
+findmin([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                           # nodist,FIXME
+findmin([1:10; [missing]])                                        # nodist,FIXME
+argmax(0:9)                                                       # nodist,FIXME
+argmax(9:-1:0)                                                    # nodist,FIXME
+argmax([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                            # nodist,FIXME
+argmax([1:10; [missing]])                                         # nodist,FIXME
+argmin(0:9)                                                       # nodist,FIXME
+argmin(9:-1:0)                                                    # nodist,FIXME
+argmin(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmin(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+argmax(x -> x^2, 0:9)                                             # nodist,FIXME
+argmax(x -> x^2, 9:-1:0)                                          # nodist,FIXME
+argmax(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmax(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+argmin(x -> x^2, 0:9)                                             # nodist,FIXME
+argmin(x -> x^2, 9:-1:0)                                          # nodist,FIXME
+argmin(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmin(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+"""
+
 args_and_kwargs(args...; kwargs...) =
     (preargs = args[1:end-1], data = args[end], kwargs = (; kwargs...))
 
@@ -186,6 +213,12 @@ end
 function _reeval()
     global TESTCASES_WITH_SEQUENTIAL_DEFAULT =
         parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA, @__MODULE__)
+    if VERSION ≥ v"1.7"
+        append!(
+            TESTCASES_WITH_SEQUENTIAL_DEFAULT,
+            parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA_JL17, @__MODULE__),
+        )
+    end
 end
 
 _reeval()

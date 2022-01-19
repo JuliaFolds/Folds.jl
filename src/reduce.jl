@@ -196,6 +196,48 @@ exec(::typeof(Folds.extrema), ex, f, itr, init) = Transducers.fold(
     init = default_to(init, DefaultInit),
 )
 
+_rf_findmax((fm, im), (fx, ix)) = isless(fm, fx) ? (fx, ix) : (fm, im)
+_rf_findmin((fm, im), (fx, ix)) = isgreater(fm, fx) ? (fx, ix) : (fm, im)
+
+exec(::typeof(Folds.findmax), ex, f, itr, init) = Transducers.fold(
+    asmonoid(_rf_findmax),
+    pairs(itr),
+    maybe_set_simd(ex, Val(true));
+    init = default_to(init, DefaultInit),
+)
+
+exec(::typeof(Folds.findmin), ex, f, itr, init) = Transducers.fold(
+    asmonoid(_rf_findmin),
+    pairs(itr),
+    maybe_set_simd(ex, Val(true));
+    init = default_to(init, DefaultInit),
+)
+
+struct YXPair{F}
+    f::F
+end
+YXPair(::Type{T}) where {T} = YXPair{Type{T}}(T)
+
+@inline (f::YXPair)(x) = (f.f(x), x)
+
+exec(::typeof(Folds.argmax), ex, f, itr, init) = last(
+    Transducers.fold(
+        asmonoid(_rf_findmax),
+        itr |> Map(YXPair(f)),
+        maybe_set_simd(ex, Val(true));
+        init = default_to(init, DefaultInit),
+    ),
+)
+
+exec(::typeof(Folds.argmin), ex, f, itr, init) = last(
+    Transducers.fold(
+        asmonoid(_rf_findmin),
+        itr |> Map(YXPair(f)),
+        maybe_set_simd(ex, Val(true));
+        init = default_to(init, DefaultInit),
+    ),
+)
+
 struct PushUnique{F} <: Function
     f::F
 end
