@@ -105,28 +105,6 @@ minimum(0:9)
 minimum(9:-1:0)
 minimum([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])
 minimum([1:10; [missing]])
-prod(1:2:10)
-prod([1:10; [missing]])
-prod(([x -x; -x x] for x in 1:2:19))
-prod(y for x in 1:11 if isodd(x) for y in 1:x:x^2; init = 1)
-reduce(+, 1:0)
-set(1:10)                                                         # nodist,FIXME
-set(x^2 for x in 1:10)
-sum(1:10)
-sum([1:10; [missing]])
-sum(x^2 for x in 1:11)
-sum(x^2 for x in 1:11 if isodd(x); init = 0)
-unique(gcd(x, 42) for x in 1:30)
-unique(x for x in 1:100 if x < 3)
-issorted([1:5; 5:-1:0])                                           # nodist,FIXME
-issorted(1:10)                                                    # nodist,FIXME
-"""
-#=
-issorted(x^2 for x in 1:10)
-issorted(x^2 for x in 1:10 if isodd(x))
-=#
-
-TESTCASES_WITH_SEQUENTIAL_RAWDATA_JL17 = """
 findmax(0:9)                                                      # nodist,FIXME
 findmax(9:-1:0)                                                   # nodist,FIXME
 findmax([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                           # nodist,FIXME
@@ -151,7 +129,26 @@ argmin(x -> x^2, 0:9)                                             # nodist,FIXME
 argmin(x -> x^2, 9:-1:0)                                          # nodist,FIXME
 argmin(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
 argmin(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+prod(1:2:10)
+prod([1:10; [missing]])
+prod(([x -x; -x x] for x in 1:2:19))
+prod(y for x in 1:11 if isodd(x) for y in 1:x:x^2; init = 1)
+reduce(+, 1:0)
+set(1:10)                                                         # nodist,FIXME
+set(x^2 for x in 1:10)
+sum(1:10)
+sum([1:10; [missing]])
+sum(x^2 for x in 1:11)
+sum(x^2 for x in 1:11 if isodd(x); init = 0)
+unique(gcd(x, 42) for x in 1:30)
+unique(x for x in 1:100 if x < 3)
+issorted([1:5; 5:-1:0])                                           # nodist,FIXME
+issorted(1:10)                                                    # nodist,FIXME
 """
+#=
+issorted(x^2 for x in 1:10)
+issorted(x^2 for x in 1:10 if isodd(x))
+=#
 
 args_and_kwargs(args...; kwargs...) =
     (preargs = args[1:end-1], data = args[end], kwargs = (; kwargs...))
@@ -213,12 +210,6 @@ end
 function _reeval()
     global TESTCASES_WITH_SEQUENTIAL_DEFAULT =
         parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA, @__MODULE__)
-    if VERSION ≥ v"1.7"
-        append!(
-            TESTCASES_WITH_SEQUENTIAL_DEFAULT,
-            parse_tests(TESTCASES_WITH_SEQUENTIAL_RAWDATA_JL17, @__MODULE__),
-        )
-    end
 end
 
 _reeval()
