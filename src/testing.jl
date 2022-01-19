@@ -105,6 +105,30 @@ minimum(0:9)
 minimum(9:-1:0)
 minimum([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])
 minimum([1:10; [missing]])
+findmax(0:9)                                                      # nodist,FIXME
+findmax(9:-1:0)                                                   # nodist,FIXME
+findmax([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                           # nodist,FIXME
+findmax([1:10; [missing]])                                        # nodist,FIXME
+findmin(0:9)                                                      # nodist,FIXME
+findmin(9:-1:0)                                                   # nodist,FIXME
+findmin([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                           # nodist,FIXME
+findmin([1:10; [missing]])                                        # nodist,FIXME
+argmax(0:9)                                                       # nodist,FIXME
+argmax(9:-1:0)                                                    # nodist,FIXME
+argmax([2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                            # nodist,FIXME
+argmax([1:10; [missing]])                                         # nodist,FIXME
+argmin(0:9)                                                       # nodist,FIXME
+argmin(9:-1:0)                                                    # nodist,FIXME
+argmin(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmin(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+argmax(x -> x^2, 0:9)                                             # nodist,FIXME
+argmax(x -> x^2, 9:-1:0)                                          # nodist,FIXME
+argmax(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmax(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
+argmin(x -> x^2, 0:9)                                             # nodist,FIXME
+argmin(x -> x^2, 9:-1:0)                                          # nodist,FIXME
+argmin(x -> x^2, [2, 3, 0, 3, 4, 0, 5, 7, 4, 2])                  # nodist,FIXME
+argmin(x -> x^2, [1:10; [missing]])                               # nodist,FIXME
 prod(1:2:10)
 prod([1:10; [missing]])
 prod(([x -x; -x x] for x in 1:2:19))

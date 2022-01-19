@@ -47,6 +47,17 @@ else
     const PartitionableArray = AbstractArray
 end
 
+_isunordered(x) = false
+_isunordered(x::AbstractFloat) = isnan(x)
+_isunordered(x::Missing) = true
+
+if !isdefined(Base, :isunordered)
+    const isunordered = _isunordered
+end
+
+# Vendoering Julia 1.7's definition of `isgreater`:
+isgreater(x, y) = isunordered(x) || isunordered(y) ? isless(x, y) : isless(y, x)
+
 @noinline some_bool() = _non_existing_variable_::Bool
 @noinline unreachable() = error("unreachable")
 
