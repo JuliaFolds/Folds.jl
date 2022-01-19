@@ -28,4 +28,16 @@ end
     end
 end
 
+@testset "default" begin
+    @test Folds.cumsum(1:3) == cumsum(1:3)
+    @test Folds.cumprod(1:3) == cumprod(1:3)
+    @test Folds.accumulate(max, 1:3) == accumulate(max, 1:3)
+
+    ys = zeros(Int, 3)
+    @test Folds.cumsum!(ys, 1:3) === ys == cumsum(1:3)
+
+    ys = zeros(Int, 3)
+    @test Folds.cumprod!(ys, 1:3) === ys == cumprod(1:3)
+end
+
 end  # module
