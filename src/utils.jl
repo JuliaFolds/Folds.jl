@@ -87,6 +87,9 @@ function define_docstrings()
         doc = read(path, String)
         doc = replace(doc, r"^```julia"m => "```jldoctest $name")
         doc = replace(doc, "<kbd>TAB</kbd>" => "_TAB_")
-        @eval Folds $Base.@doc $doc $name
+        ex = :($Base.@doc $doc $name)
+        ex.args[2]::LineNumberNode
+        ex.args[2] = LineNumberNode(1, Symbol(path))
+        Base.eval(Folds, ex)
     end
 end
