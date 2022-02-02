@@ -91,10 +91,8 @@ function Folds.foreach(f, itr, itrs...; kwargs...)
 end
 
 function Folds.map!(f, dest, array, arrays...; kwargs...)
-    Folds.foreach(referenceable(dest), array, arrays...; kwargs...) do y, xs...
-        Base.@_inline_meta
-        y[] = f(xs...)
-    end
+    @inline map_body!(y, xs...) = y[] = f(xs...)
+    Folds.foreach(map_body!, referenceable(dest), array, arrays...; kwargs...)
     return dest
 end
 
