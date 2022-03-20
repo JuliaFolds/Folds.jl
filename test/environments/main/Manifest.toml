@@ -120,11 +120,18 @@ git-tree-sha1 = "395fa1554c69735802bba37d9e7d9586fd44326c"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.24.11"
 
+[[ExternalDocstrings]]
+git-tree-sha1 = "0c7f9dfc999acb13e54ed85e8bdb90bd285ff5a9"
+repo-rev = "main"
+repo-url = "https://github.com/tkf/ExternalDocstrings.jl.git"
+uuid = "e189563c-0753-4f5e-ad5c-be4293c83fb4"
+version = "0.1.0-DEV"
+
 [[Folds]]
-deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
+deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "ExternalDocstrings", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
 path = "../../.."
 uuid = "41a02a25-b8f0-4f67-bc48-60067656b558"
-version = "0.2.7-DEV"
+version = "0.2.8-DEV"
 
 [[Formatting]]
 deps = ["Printf"]

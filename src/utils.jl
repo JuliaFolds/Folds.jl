@@ -71,25 +71,3 @@ end
 # The result of this function must not leak outside the public function boundary.
 @inline infer_eltype(::T) where {T} = infer_eltype(T)
 @inline infer_eltype(::Type{T}) where {T} = Core.Compiler.return_type(some_item, Tuple{T})
-
-function define_docstrings()
-    docstrings = [:Folds => joinpath(dirname(@__DIR__), "README.md")]
-    docsdir = joinpath(@__DIR__, "docs")
-    for filename in readdir(docsdir)
-        stem, ext = splitext(filename)
-        ext == ".md" || continue
-        name = Symbol(stem)
-        name in names(Folds, all=true) || continue
-        push!(docstrings, name => joinpath(docsdir, filename))
-    end
-    for (name, path) in docstrings
-        include_dependency(path)
-        doc = read(path, String)
-        doc = replace(doc, r"^```julia"m => "```jldoctest $name")
-        doc = replace(doc, "<kbd>TAB</kbd>" => "_TAB_")
-        ex = :($Base.@doc $doc $name)
-        ex.args[2]::LineNumberNode
-        ex.args[2] = LineNumberNode(1, Symbol(path))
-        Base.eval(Folds, ex)
-    end
-end
