@@ -197,16 +197,24 @@ exec(::typeof(Folds.extrema), ex, f, itr, init) = Transducers.fold(
 _rf_findmax((fm, im), (fx, ix)) = isless(fm, fx) ? (fx, ix) : (fm, im)
 _rf_findmin((fm, im), (fx, ix)) = isgreater(fm, fx) ? (fx, ix) : (fm, im)
 
+struct MapValueThenFlip{F}
+    f::F
+end
+
+MapValueThenFlip(::Type{T}) where {T} = MapValueThenFlip{Type{T}}(T)
+
+@inline (f::MapValueThenFlip)((i, x)) = (f.f(x), i)
+
 exec(::typeof(Folds.findmax), ex, f, itr, init) = Transducers.fold(
     asmonoid(_rf_findmax),
-    pairs(itr),
+    pairs(itr) |> Map(MapValueThenFlip(f)),
     maybe_set_simd(ex, Val(true));
     init = default_to(init, DefaultInit),
 )
 
 exec(::typeof(Folds.findmin), ex, f, itr, init) = Transducers.fold(
     asmonoid(_rf_findmin),
-    pairs(itr),
+    pairs(itr) |> Map(MapValueThenFlip(f)),
     maybe_set_simd(ex, Val(true));
     init = default_to(init, DefaultInit),
 )
@@ -218,21 +226,53 @@ YXPair(::Type{T}) where {T} = YXPair{Type{T}}(T)
 
 @inline (f::YXPair)(x) = (f.f(x), x)
 
-exec(::typeof(Folds.argmax), ex, f, itr, init) = last(
+Folds.argmax(f, itr; init = DefaultInit, kwargs...) =
+    Folds.argmax(f, itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
+
+Folds.argmax(f, itr, ex::Executor; init = DefaultInit) = last(
     Transducers.fold(
         asmonoid(_rf_findmax),
         itr |> Map(YXPair(f)),
         maybe_set_simd(ex, Val(true));
-        init = default_to(init, DefaultInit),
+        init = init,
     ),
 )
 
-exec(::typeof(Folds.argmin), ex, f, itr, init) = last(
+Folds.argmin(f, itr; init = DefaultInit, kwargs...) =
+    Folds.argmin(f, itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
+
+Folds.argmin(f, itr, ex::Executor; init = DefaultInit) = last(
     Transducers.fold(
         asmonoid(_rf_findmin),
         itr |> Map(YXPair(f)),
         maybe_set_simd(ex, Val(true));
-        init = default_to(init, DefaultInit),
+        init = init,
+    ),
+)
+
+@inline flip((i, x)) = (x, i)
+
+Folds.argmax(itr; init = DefaultInit, kwargs...) =
+    Folds.argmax(itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
+
+Folds.argmax(itr, ex::Executor; init = DefaultInit) = last(
+    Transducers.fold(
+        asmonoid(_rf_findmax),
+        pairs(itr) |> Map(flip),
+        maybe_set_simd(ex, Val(true));
+        init = init,
+    ),
+)
+
+Folds.argmin(itr; init = DefaultInit, kwargs...) =
+    Folds.argmin(itr, parallel_executor(bottom_foldable(itr); kwargs...); init = init)
+
+Folds.argmin(itr, ex::Executor; init = DefaultInit) = last(
+    Transducers.fold(
+        asmonoid(_rf_findmin),
+        pairs(itr) |> Map(flip),
+        maybe_set_simd(ex, Val(true));
+        init = init,
     ),
 )
 

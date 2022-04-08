@@ -29,11 +29,12 @@ DefineSingletons.@def_singleton maximum isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton minimum isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton findmax isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton findmin isa Core.ReducerFunctionAndFoldable
-DefineSingletons.@def_singleton argmax isa Core.ReducerFunctionAndFoldable
-DefineSingletons.@def_singleton argmin isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton prod isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton sum isa Core.ReducerFunctionAndFoldable
 DefineSingletons.@def_singleton unique isa Core.ReducerFunctionAndFoldable
+
+function argmax end
+function argmin end
 
 function issorted end
 
