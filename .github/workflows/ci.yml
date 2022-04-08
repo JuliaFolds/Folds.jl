@@ -1,4 +1,4 @@
-name: Run tests
+name: CI
 
 on:
   push:
@@ -35,10 +35,47 @@ jobs:
           flags: unittests
           name: codecov-umbrella
 
+  vanilla-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-runtest@v1
+        env:
+          JULIA_NUM_THREADS: "2"
+          CI: "true"
+
+  documenter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.6
+      - name: Install Run.jl
+        run: julia -e 'using Pkg; pkg"add Run@0.1"'
+      - name: Install dependencies
+        run: julia -e 'using Run; Run.prepare_docs()'
+      - name: Build and deploy
+        id: build-and-deploy
+        if: |
+          github.event_name == 'push' || (
+            github.event_name == 'pull_request' &&
+            !contains(github.head_ref, 'create-pull-request/')
+          )
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.SSH_KEY }}
+        run: julia -e 'using Run; Run.docs()'
+      - name: Just build
+        if: steps.build-and-deploy.outcome == 'skipped'
+        run: julia -e 'using Run; Run.docs()'
+
   # A job that succeeds if and only if all jobs in `test` succeed.
   all-success:
     if: always() && github.event.pull_request
-    needs: test
+    needs: [test, vanilla-test, documenter]
     runs-on: ubuntu-latest
     steps:
       # https://github.com/tkf/merge-conclusions-action
