@@ -66,6 +66,7 @@ using BangBang:
 using Base: HasShape, IteratorSize, add_sum, mapreduce_empty, mul_prod, reduce_empty
 using Baselet: Baselet
 using DefineSingletons: @def_singleton
+using ExternalDocstrings: @define_docstrings
 using InitialValues: @def_monoid, SpecificInitialValue, asmonoid
 using MicroCollections: emptyshim, singletonshim
 using Referenceables: isreferenceable, referenceable
@@ -118,6 +119,6 @@ module Testing
 include("testing.jl")
 end
 
-Implementations.define_docstrings()
+Implementations.@define_docstrings
 
 end
