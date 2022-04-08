@@ -121,11 +121,9 @@ uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.24.11"
 
 [[ExternalDocstrings]]
-git-tree-sha1 = "0c7f9dfc999acb13e54ed85e8bdb90bd285ff5a9"
-repo-rev = "main"
-repo-url = "https://github.com/tkf/ExternalDocstrings.jl.git"
+git-tree-sha1 = "6d60956074103b5f61356ade2a9d0da8f6888661"
 uuid = "e189563c-0753-4f5e-ad5c-be4293c83fb4"
-version = "0.1.0-DEV"
+version = "0.1.0"
 
 [[Folds]]
 deps = ["Accessors", "BangBang", "Baselet", "DefineSingletons", "Distributed", "ExternalDocstrings", "InitialValues", "MicroCollections", "Referenceables", "Requires", "Test", "ThreadedScans", "Transducers"]
