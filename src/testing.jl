@@ -86,6 +86,7 @@ copy(Dict, (x => x^2 for x in Set(1:10)))                         # nodist,FIXME
 copy(Vector, 1:10)
 count(isodd(x) for x in 1:10)
 dict(x => x^2 for x in 1:10)
+dict([x => x^2 for x in 1:10])                                    # nodist,FIXME
 extrema((x - 5)^2 for x in 1:10)
 findall(isodd, 1:10)                                              # nodist,FIXME
 findfirst(x -> x > 3, 1:10)                                       # nodist,FIXME

@@ -56,15 +56,22 @@ function copy_default(T::Type{<:AbstractSet}, itr, ex)
     return Folds.reduce(union!!, itr |> Map(SingletonVector), ex; init = Empty(T))
 end
 
+struct Unpairs{Data}
+    data::Data
+end
+
+Base.pairs(pairs::Unpairs) = pairs.data
+
 function copy_default(T::Type{<:AbstractDict}, itr, ex)
     xf, array = extract_transducer(itr)
     if xf isa Union{Map{identity},IdentityTransducer}
         if array isa PartitionableArray
+            isempty(array) && return T(array)
             basesize =
                 something(get_basesize(ex), max(1, length(array) ÷ Threads.nthreads()))
             return Folds.reduce(
                 merge!!,
-                Iterators.partition(array, basesize),
+                Iterators.partition(array, basesize) |> Map(Unpairs),
                 set_basesize(ex, 1);
                 init = emptyshim(T),
             )
