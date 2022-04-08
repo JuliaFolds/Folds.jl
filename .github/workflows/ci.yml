@@ -72,10 +72,17 @@ jobs:
         if: steps.build-and-deploy.outcome == 'skipped'
         run: julia -e 'using Run; Run.docs()'
 
+  # https://github.com/tkf/julia-code-style-suggesters
+  code-style:
+    if: always() && github.event.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tkf/julia-code-style-suggesters@v1
+
   # A job that succeeds if and only if all jobs in `test` succeed.
   all-success:
     if: always() && github.event.pull_request
-    needs: [test, vanilla-test, documenter]
+    needs: [test, vanilla-test, documenter, code-style]
     runs-on: ubuntu-latest
     steps:
       # https://github.com/tkf/merge-conclusions-action
