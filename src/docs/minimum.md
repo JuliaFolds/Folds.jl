@@ -1,7 +1,7 @@
-    Folds.maximum([f,] collection; [executor_options...])
-    Folds.maximum([f,] collection, executor)
+    Folds.minimum([f,] collection; [executor_options...])
+    Folds.minimum([f,] collection, executor)
 
-Compute the maximum of the items in `collection`, optionally evaluated by
+Compute the minimum of the items in `collection`, optionally evaluated by
 `f`. Parallel by default.
 
 See _Extended help_ in [`Folds.reduce`](@ref) for more information.
